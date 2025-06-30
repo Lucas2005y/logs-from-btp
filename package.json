@@ -7,18 +7,45 @@
   "private": true,
   "dependencies": {
     "@cap-js/hana": "^2",
+    "@cap-js/sqlite": "^2.0.1",
     "@sap/cds": "^9",
-    "@sap/xssec": "^4.8.0",
+    "@sap/hana-client": "^2.25.22",
+    "@sap/xssec": "^4",
     "express": "^4"
   },
   "engines": {
     "node": ">=20"
   },
   "devDependencies": {
+    "@cap-js/cds-types": "^0.11.0",
+    "@cap-js/db-service": "^2.1.2",
     "@sap/cds-dk": ">=8"
   },
   "scripts": {
     "start": "cds-serve"
   },
-  "cds": {}
+  "cds": {
+    "sql": {
+      "native_hana_associations": false
+    },
+    "requires": {
+      "[production]": {
+        "auth": "xsuaa"
+      },
+      "[development]": {
+        "auth": {
+          "kind": "mocked",
+          "users": {
+            "joe": {
+              "tenant": "t1",
+              "roles": [
+                "admin"
+              ]
+            }
+          }
+        }
+      },
+      "html5-runtime": true
+    }
+  }
 }

@@ -1,7 +1,7 @@
 using {LogService as srv} from './service';
-annotate srv.Logs {
+annotate srv.savedLogs {
 
-    @description: '{i18n>Descricao_Logs_ECC}'
+    @description: '{i18n>Descricao_Logs_BTP}'
 
     @title: '{i18n>ID}'
     ID;
@@ -31,5 +31,5 @@ annotate srv.Logs {
     modifiedBy;
 }
 
-annotate srv.Logs with @UI.DeleteHidden : true;
+annotate srv.savedLogs with @UI.DeleteHidden : true;
 //with @odata.draft.enabled

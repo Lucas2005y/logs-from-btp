@@ -4,27 +4,28 @@ version: 1.0.0
 description: "A simple CAP project."
 parameters:
   enable-parallel-deployments: true
+  deploy_mode: html5-repo
 build-parameters:
   before-all:
     - builder: custom
       commands:
-        - npm ci
+        - npm install
         - npx cds build --production
 modules:
   - name: logs-from-btp-srv
     type: nodejs
     path: gen/srv
     parameters:
-      instances: 1
       buildpack: nodejs_buildpack
     build-parameters:
-      builder: npm-ci
+      builder: npm
     provides:
       - name: srv-api # required by consumers of CAP services (e.g. approuter)
         properties:
           srv-url: ${default-url}
     requires:
       - name: logs-from-btp-db
+      - name: logs-from-btp-auth
 
   - name: logs-from-btp-db-deployer
     type: hdb
@@ -40,3 +41,19 @@ resources:
     parameters:
       service: hana
       service-plan: hdi-shared
+
+  - name: logs-from-btp-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: logs-from-btp-${org}-${space}
+        tenant-mode: dedicated
+
+  # - name: logs-from-btp-html5-repo-host
+  #   type: org.cloudfoundry.managed-service
+  #   parameters:
+  #     service: html5-apps-repo
+  #     service-plan: app-host

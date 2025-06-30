@@ -1,4 +1,4 @@
-namespace logs.ecc;
+namespace logs.btp;
 
 using {
   cuid,
