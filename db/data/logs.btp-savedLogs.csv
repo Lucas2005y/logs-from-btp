@@ -1,5 +1,5 @@
 ID;userId;app;timestamp;message
-7ee023a4-5e50-41bd-1234-430057688d24;user01@gmail.com;PortalWeb;2025-06-17T08:30:00Z;Login realizado com sucesso.
+7aa023a4-5e50-41bd-1234-430057688d24;user01@gmail.com;PortalWeb;2025-06-17T08:30:00Z;Login realizado com sucesso.
 7ee023a4-5e50-41bd-4567-430057688d24;user02@gmail.com;ECC;2025-06-17T09:15:23Z;Erro ao acessar o sistema ECC.
 7ee023a4-5e50-41bd-8645-430057688d24;user03@gmail.com;ECC;2025-06-17T10:05:45Z;Transação concluída: Pedido de venda 4500012345.
 7ee023a4-5e50-41bd-2369-430057688d24;user01@gmail.com;PortalWeb;2025-06-17T11:20:10Z;Sessão expirada por inatividade.

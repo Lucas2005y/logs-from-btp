@@ -1,12 +1,21 @@
 {
-  "[production]": {
-    "hana": {
-      "deploy-format": "hdbtable"
+    "[production]": {
+        "hana":{
+            "deploy-format": "hdbtable"
+        },
+        "requires":{
+            "db": {
+                "kind": "hana"
+            },
+            "auth": "xsuaa"
+        }
     },
-    "requires": {
-      "db": {
-        "kind": "hana"
-      }
+    "[hybrid]": {
+        "requires": {
+            "db": {
+                "kind": "hana"
+            }
+        }
     }
-  }
+
 }

@@ -1,7 +1,7 @@
 _schema-version: 3.3.0
 ID: logs-from-btp
 version: 1.0.0
-description: "A simple CAP project."
+description: "Project of Logs."
 parameters:
   enable-parallel-deployments: true
   deploy_mode: html5-repo
@@ -17,15 +17,79 @@ modules:
     path: gen/srv
     parameters:
       buildpack: nodejs_buildpack
+      readiness-health-check-http-endpoint: /health
+      readiness-health-check-type: http
+      routes:
+        - route: ${space}-logs-from-btp-srv.${default-domain}
     build-parameters:
       builder: npm
     provides:
-      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+      - name: srv-api
         properties:
-          srv-url: ${default-url}
+          srv-url: ${routes/0/route}
     requires:
       - name: logs-from-btp-db
       - name: logs-from-btp-auth
+      - name: logs-from-btp-destination
+
+  - name: logs-from-btp-app-deployer
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: logs-from-btp-html5-repo-host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: resources
+      requires:
+        - artifacts:
+            - logs-from-btp.zip
+          name: logs-from-btp
+          target-path: resources/
+
+  #Conteúdo app
+  - name: logs-from-btp-app-content
+    type: com.sap.application.content
+    build-parameters:
+      no-source: true
+    requires:
+      - name: logs-from-btp-html5-repo-host
+        parameters:
+          service-key:
+            name: logs-from-btp-html5-repo-host-key
+      - name: logs-from-btp-auth
+        parameters:
+          service-key:
+            name: logs-from-btp-auth-key
+      - name: logs-from-btp-destination
+        parameters:
+          content-target: true
+    parameters:
+      content:
+        instance:
+          existing_destinations_policy: update
+          destinations:
+            - Name: logs-from-btp-html5-repo-host
+              ServiceInstanceName: logs-from-btp-html5-srv
+              ServiceKeyName: logs-from-btp-html5-repo-host-key
+              sap.cloud.service: btp.logs
+            - Name: logs-from-btp-auth
+              Authentication: OAuth2UserTokenExchange
+              ServiceInstanceName: logs-from-btp-auth
+              ServiceKeyName: logs-from-btp-repo-auth-key
+              sap.cloud.service: btp.logs
+
+  - name: logs-from-btp
+    type: html5
+    path: app/btp-logs
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms:
+        []
 
   - name: logs-from-btp-db-deployer
     type: hdb
@@ -34,6 +98,7 @@ modules:
       buildpack: nodejs_buildpack
     requires:
       - name: logs-from-btp-db
+
 
 resources:
   - name: logs-from-btp-db
@@ -52,8 +117,36 @@ resources:
         xsappname: logs-from-btp-${org}-${space}
         tenant-mode: dedicated
 
-  # - name: logs-from-btp-html5-repo-host
-  #   type: org.cloudfoundry.managed-service
-  #   parameters:
-  #     service: html5-apps-repo
-  #     service-plan: app-host
+  - name: logs-from-btp-html5-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+      service-name: logs-from-btp-html5-srv
+
+  #Destination para acesso do Cap
+  - name: logs-from-btp-destination
+    type: org.cloudfoundry.managed-service
+    requires:
+      - name: srv-api
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+        init_data:
+          instance:
+            destinations:
+              - Authentication: NoAuthentication
+                Name: ui5
+                ProxyType: Internet
+                Type: HTTP
+                URL: https://ui5.sap.com
+              - Authentication: NoAuthentication
+                Name: btp-logs-cap
+                ProxyType: Internet
+                HTML5.ForwardAuthToken: true
+                HTML5.DynamicDestination: true
+                Type: HTTP
+                URL: https://~{srv-api/srv-url}
+            existing_destinations_policy: update
+      service: destination
+      service-plan: lite
