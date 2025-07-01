@@ -64,11 +64,7 @@ annotate service.savedLogs with @(
             Value: app,
             Label: '{@i18n>Aplicacao}',
         },
-        {
-            $Type: 'UI.DataField',
-            Value: timestamp,
-            Label: '{@i18n>Data_Hora}',
-        },
+
     ],
     UI.SelectionFields           : [
         ID,
