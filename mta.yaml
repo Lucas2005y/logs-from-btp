@@ -91,13 +91,13 @@ modules:
       supported-platforms:
         []
 
-  - name: logs-from-btp-db-deployer
-    type: hdb
-    path: gen/db
-    parameters:
-      buildpack: nodejs_buildpack
-    requires:
-      - name: logs-from-btp-db
+  # - name: logs-from-btp-db-deployer
+  #   type: hdb
+  #   path: gen/db
+  #   parameters:
+  #     buildpack: nodejs_buildpack
+  #   requires:
+  #     - name: logs-from-btp-db
 
 
 resources:
