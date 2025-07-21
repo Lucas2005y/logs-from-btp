@@ -1,5 +1,53 @@
 {
-  "scopes": [],
+  "xsappname": "logs-from-btp-${org}-${space}",
+  "tenant-mode": "dedicated",
+  "description": "Security for Logs Application",
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.View",
+      "description": "View logs"
+    },
+    {
+      "name": "$XSAPPNAME.CRUD",
+      "description": "Create, Read, Update, Delete logs"
+    },
+    {
+      "name": "uaa.user",
+      "description": "UAA user scope"
+    }
+  ],
   "attributes": [],
-  "role-templates": []
+  "role-templates": [
+    {
+      "name": "LogsViewer",
+      "description": "Role to view logs",
+      "scope-references": [
+        "$XSAPPNAME.View"
+      ]
+    },
+    {
+      "name": "LogsAdmin",
+      "description": "Role to administer logs (CRUD operations)",
+      "scope-references": [
+        "$XSAPPNAME.View",
+        "$XSAPPNAME.CRUD"
+      ]
+    }
+  ],
+  "role-collections": [
+    {
+      "name": "Logs_Viewer",
+      "description": "Role Collection for viewing logs",
+      "role-template-references": [
+        "$XSAPPNAME.LogsViewer"
+      ]
+    },
+    {
+      "name": "Logs_Admin",
+      "description": "Role Collection for administering logs",
+      "role-template-references": [
+        "$XSAPPNAME.LogsAdmin"
+      ]
+    }
+  ]
 }
