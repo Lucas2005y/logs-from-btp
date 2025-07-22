@@ -6,14 +6,8 @@ annotate srv.savedLogs {
     @title: '{i18n>ID}'
     ID;
 
-    @title: '{i18n>Usuario}'
-    userId;
-
     @title: '{i18n>Aplicacao}'
-    app;
-
-    @title: '{i18n>Data_Hora}'
-    timestamp;
+    application;
 
     @title: '{i18n>Mensagem}'
     message;

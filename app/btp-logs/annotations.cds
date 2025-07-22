@@ -21,7 +21,7 @@ annotate service.savedLogs with @(
             },
             {
                 $Type: 'UI.DataField',
-                Value: app,
+                Value: application,
                 Label: '{@i18n>Aplicacao}',
             },
             {
@@ -29,11 +29,7 @@ annotate service.savedLogs with @(
                 Value: message,
                 Label: '{@i18n>Mensagem}',
             },
-            {
-                $Type: 'UI.DataField',
-                Value: userId,
-                Label: '{@i18n>Usuario}',
-            },
+
         ],
     },
     UI.Facets : [
@@ -61,15 +57,14 @@ annotate service.savedLogs with @(
         },
         {
             $Type: 'UI.DataField',
-            Value: app,
+            Value: application,
             Label: '{@i18n>Aplicacao}',
         },
 
     ],
     UI.SelectionFields           : [
         ID,
-        userId,
-        app,
+        application,
     ],
      UI.PresentationVariant       : {
         SortOrder     : [{
@@ -82,5 +77,5 @@ annotate service.savedLogs with @(
 );
 
 annotate service.savedLogs with {
-    ID @Common.Label: '{@i18n>ID}'
+    application @Common.Label: '{@i18n>Aplicacao}'
 };
